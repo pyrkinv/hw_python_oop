@@ -20,12 +20,12 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Возвращает f-строку, с данными, которые надо подать на вывод."""
-        DATA = asdict(self)
-        mes = self.OUT_MESSAGE_RU.format(training_type=DATA['training_type'],
-                                         duration=DATA['duration'],
-                                         distance=DATA['distance'],
-                                         speed=DATA['speed'],
-                                         calories=DATA['calories'])
+        data = asdict(self)
+        mes = self.OUT_MESSAGE_RU.format(training_type=data['training_type'],
+                                         duration=data['duration'],
+                                         distance=data['distance'],
+                                         speed=data['speed'],
+                                         calories=data['calories'])
         return mes
 
 
@@ -153,7 +153,8 @@ class Swimming(Training):
         return spent_calories
 
 
-def read_package(workout_type: str, data: List[Union[int, float]]) -> Training:
+def read_package(workout_type: str,
+                 data: List[Union[int, float]]) -> Union[Training, None]:
     """Прочитать данные полученные от датчиков."""
 
     TRAIN = {'SWM': Swimming,
@@ -164,10 +165,10 @@ def read_package(workout_type: str, data: List[Union[int, float]]) -> Training:
         return training_actual
     except KeyError:
         print('Неизвестная кодировка типа тренировки.')
-        pass
+        return None
 
 
-def main(training: Training) -> None:
+def main(training: Union[Training, None]) -> None:
     """Главная функция."""
 
     try:
